@@ -53,10 +53,10 @@ public class ExcelTest {
      */
     @Test
     public void myExcel() throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Excel excel = new Excel("c://test1.xlsx");
+        Excel excel = new Excel("c://student_temp.xls");
         ExcelSheet sheet = excel.getSheet();
-        sheet.setDateList(init(), 0, 0);
-        excel.saveExcel("c://test3.xlsx");
+        sheet.setDateList(init(), 2, 0);
+        excel.saveExcel("c://student_temp_rs.xlsx");
     }
 
     /**
