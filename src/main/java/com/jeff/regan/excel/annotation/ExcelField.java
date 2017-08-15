@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 public @interface ExcelField {
     String value() default "";
 
-    String title();
+    String title() default "";
 
     int type() default 0;
 

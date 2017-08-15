@@ -81,3 +81,29 @@ public void myExcel() throws IOException, NoSuchMethodException, IllegalAccessEx
 ![image](./image/student_temp.jpg)
 ###### 导出的数据
 ![image](./image/student_temp_rs.jpg)
+
+4.基于注解导出excel
+###### 注解导出（无样式）
+``` java
+Excel excel = new Excel();
+ExcelSheet sheet = excel.createSheet();
+sheet.title("学生统计表"); //设置excel title名称(可不设)
+sheet.header(Student.class).setData(init()); //设置 data
+excel.saveExcel("c://student_annotation.xlsx");
+``` 
+##### 效果
+![image](./image/test001.jpg)
+
+###### 注解导出（自定义样式）
+``` java
+Excel excel = new Excel();
+ExcelSheet sheet = excel.createSheet();
+//获取excel样式
+Map<String, CellStyle> styles = createStyles(excel.getWorkbook());
+sheet.title("学生统计表").cellStyle(styles.get("title"));    //设置title 以及样式
+sheet.header(Student.class, styles.get("header"))           //设置hear 以及样式
+        .setData(init()).cellStyle(styles.get("data"));     //设置data 样式
+excel.saveExcel("c://student_annotation.xlsx");
+``` 
+##### 效果
+![image](./image/test002.jpg)
