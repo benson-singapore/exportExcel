@@ -2,6 +2,8 @@ package com.jeff.regan.excel.vo;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 
@@ -12,14 +14,14 @@ import java.io.*;
  * @date 2017/8/2 15:08
  */
 public class Excel {
-    private HSSFWorkbook hssfWorkbook;
+    private Workbook workbook;
 
     /**
      * 创建excel
      */
     public Excel() {
         //创建工作簿对象
-        this.hssfWorkbook = new HSSFWorkbook();
+        this.workbook = new HSSFWorkbook();
     }
 
     /**
@@ -33,7 +35,11 @@ public class Excel {
         File fi = new File(filePath);
         POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(fi));
         //读取excel模板
-        this.hssfWorkbook = new HSSFWorkbook(fs);
+        try {
+            this.workbook = new HSSFWorkbook(fs);
+        }catch (Exception e){
+            this.workbook = new XSSFWorkbook(new FileInputStream(fi));
+        }
     }
 
     /**
@@ -42,7 +48,7 @@ public class Excel {
      * @return
      */
     public ExcelSheet createSheet() {
-        return new ExcelSheet(this.hssfWorkbook.createSheet());
+        return new ExcelSheet(this.workbook.createSheet());
     }
 
     /**
@@ -52,7 +58,7 @@ public class Excel {
      * @return
      */
     public ExcelSheet createSheet(String sheetName) {
-        return new ExcelSheet(this.hssfWorkbook.createSheet(sheetName));
+        return new ExcelSheet(this.workbook.createSheet(sheetName));
     }
 
     /**
@@ -62,7 +68,7 @@ public class Excel {
      * @return
      */
     public ExcelSheet createSheet(int sheetIndex) {
-        return new ExcelSheet(this.hssfWorkbook.cloneSheet(sheetIndex));
+        return new ExcelSheet(this.workbook.cloneSheet(sheetIndex));
     }
 
     /**
@@ -71,7 +77,7 @@ public class Excel {
      * @return
      */
     public ExcelSheet getSheet(String sheetName) {
-        return new ExcelSheet(this.hssfWorkbook.getSheet(sheetName));
+        return new ExcelSheet(this.workbook.getSheet(sheetName));
     }
 
     /**
@@ -80,19 +86,18 @@ public class Excel {
      * @return
      */
     public ExcelSheet getSheet(int sheetIndex) {
-        return new ExcelSheet(this.hssfWorkbook.getSheetAt(sheetIndex));
+        return new ExcelSheet(this.workbook.getSheetAt(sheetIndex));
     }
     /**
      * 获取工作簿 根据
      * @return
      */
     public ExcelSheet getSheet() {
-        return new ExcelSheet(this.hssfWorkbook.getSheetAt(0));
+        return new ExcelSheet(this.workbook.getSheetAt(0));
     }
 
-
-    public HSSFWorkbook getHssfWorkbook() {
-        return hssfWorkbook;
+    public Workbook getWorkbook() {
+        return workbook;
     }
 
     /**
@@ -103,7 +108,7 @@ public class Excel {
      */
     public void saveExcel(String file) throws IOException {
         OutputStream out = new FileOutputStream(new File(file));
-        this.hssfWorkbook.write(out);
+        this.workbook.write(out);
     }
 
     /**
@@ -113,6 +118,6 @@ public class Excel {
      * @throws IOException
      */
     public void saveExcel(OutputStream outputStream) throws IOException {
-        this.hssfWorkbook.write(outputStream);
+        this.workbook.write(outputStream);
     }
 }

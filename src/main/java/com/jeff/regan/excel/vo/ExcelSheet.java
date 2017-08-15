@@ -7,9 +7,9 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.util.Region;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.RichTextString;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -26,30 +26,26 @@ import java.util.stream.Collectors;
  */
 public class ExcelSheet {
     public static final String GET_METHOD_TYPE = "get"; // 获取method
-    private HSSFSheet hssfSheet;
+    private Sheet sheet;
 
-    public ExcelSheet(HSSFSheet hssfSheet) {
-        this.hssfSheet = hssfSheet;
+    public ExcelSheet(Sheet sheet) {
+        this.sheet = sheet;
     }
 
     public ExcelRow row(int rownum) {
-        HSSFRow row = this.hssfSheet.getRow(rownum);
+        Row row = this.sheet.getRow(rownum);
         if (row == null) {
-            row = this.hssfSheet.createRow(rownum);
+            row = this.sheet.createRow(rownum);
         }
         return new ExcelRow(row);
     }
 
-    public HSSFSheet getHssfSheet() {
-        return hssfSheet;
+    public Sheet getHssfSheet() {
+        return sheet;
     }
 
-    public ExcelSheet addMergedRegion(Region region){
-        this.hssfSheet.addMergedRegion(region);
-        return this;
-    }
     public ExcelSheet addMergedRegion(CellRangeAddress region){
-        this.hssfSheet.addMergedRegion(region);
+        this.sheet.addMergedRegion(region);
         return this;
     }
 
@@ -96,17 +92,17 @@ public class ExcelSheet {
     public void autoWeight(int columnNum) {
         //让列宽随着导出的列长自动适应
         for (int colNum = 0; colNum < columnNum; colNum++) {
-            int columnWidth = hssfSheet.getColumnWidth(colNum) / 256;
-            for (int rowNum = 0; rowNum < hssfSheet.getLastRowNum(); rowNum++) {
-                HSSFRow currentRow;
+            int columnWidth = sheet.getColumnWidth(colNum) / 256;
+            for (int rowNum = 0; rowNum < sheet.getLastRowNum(); rowNum++) {
+                Row currentRow;
                 //当前行未被使用过
-                if (hssfSheet.getRow(rowNum) == null) {
-                    currentRow = hssfSheet.createRow(rowNum);
+                if (sheet.getRow(rowNum) == null) {
+                    currentRow = sheet.createRow(rowNum);
                 } else {
-                    currentRow = hssfSheet.getRow(rowNum);
+                    currentRow = sheet.getRow(rowNum);
                 }
                 if (currentRow.getCell(colNum) != null) {
-                    HSSFCell currentCell = currentRow.getCell(colNum);
+                    Cell currentCell = currentRow.getCell(colNum);
                     if (currentCell.getCellType() == HSSFCell.CELL_TYPE_STRING) {
                         int length = currentCell.getStringCellValue().getBytes().length;
                         if (columnWidth < length) {
@@ -115,7 +111,7 @@ public class ExcelSheet {
                     }
                 }
             }
-            hssfSheet.setColumnWidth(colNum, (columnWidth + 4) * 256);
+            sheet.setColumnWidth(colNum, (columnWidth + 4) * 256);
         }
     }
 
@@ -173,10 +169,10 @@ public class ExcelSheet {
      * @date 2017/8/2 17:29
      */
     public class ExcelRow {
-        private HSSFRow row;
-        private HSSFCell cell;
+        private Row row;
+        private Cell cell;
 
-        public ExcelRow(HSSFRow row) {
+        public ExcelRow(Row row) {
             this.row = row;
         }
 
@@ -226,11 +222,11 @@ public class ExcelSheet {
             return this;
         }
 
-        public HSSFRow getRow() {
+        public Row getRow() {
             return row;
         }
 
-        public HSSFCell getCell() {
+        public Cell getCell() {
             return cell;
         }
     }
