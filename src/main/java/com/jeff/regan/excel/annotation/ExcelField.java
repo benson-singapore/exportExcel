@@ -13,19 +13,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelField {
-    String value() default "";
 
     String title() default "";
 
-    int type() default 0;
-
-    int align() default 0;
-
     int sort() default 0;
-
-    String dictType() default "";
-
-    Class<?> fieldType() default Class.class;
-
-    int[] groups() default {};
 }
