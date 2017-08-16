@@ -107,3 +107,51 @@ excel.saveExcel("c://student_annotation.xlsx");
 ``` 
 ##### 效果
 ![image](./image/test002.jpg)
+
+
+5.excel导入 (测试导入上图内容)
+##### 直接将excel内容导入到 List对象中
+``` java
+Excel excel = new Excel("c://student_annotation.xlsx");
+ExcelSheet sheet = excel.getSheet();
+List<Map<String, String>> list = sheet.getList(1, 0).toMap(); //1,0(为起始位置，从header开始算起)核心方法
+list.forEach(map -> System.out.println(map));
+```
+###### 打印结果
+```html 
+{姓名=tom, 年龄=10, 学校=huax, 入学时间=2017-08-15}
+{姓名=tom, 年龄=10, 学校=huax, 入学时间=2017-08-15}
+{姓名=tom, 年龄=10, 学校=huax, 入学时间=2017-08-15}
+```
+##### 考虑到上述数据不是我们所需要的，特此增加注解导出的方法。
+``` java
+List<Map<String, String>> list = sheet.getList(1, 0).toMap4Annotation(Student.class); 
+```
+###### 打印结果
+```html 
+{name=tom, age=10, school=huax, joinDate=2017-08-15}
+{name=tom, age=10, school=huax, joinDate=2017-08-15}
+{name=tom, age=10, school=huax, joinDate=2017-08-15}
+```
+##### 有可能注解并不能很实用，在实际开发中，为此增加了自定义的方式（打印结果如上）。
+``` java
+String keyValue = "姓名:name,学校:school,年龄:age,入学时间:joinDate";
+List<Map<String, String>> list = sheet.getList(1, 0,keyValue).toMap();
+```
+
+6.excel导入映射至对象 
+##### 实际开发中，更为实用的是直接映射到对象里，为此新增了导入对象的方法。
+``` java
+List<Student> list = sheet.getList(1, 0).toObject(Student.class);
+```
+##### 同时可自定义导入对象属性中。
+``` java
+String keyValue = "姓名:name,学校:school,年龄:age,入学时间:joinDate";
+List<Student> list = sheet.getList(1, 0,keyValue).toObject(Student.class);
+```
+###### 打印结果
+```html 
+Student{name='tom', school='huax', age=10, joinDate=Tue Aug 15 00:00:00 CST 2017}
+Student{name='tom', school='huax', age=10, joinDate=Tue Aug 15 00:00:00 CST 2017}
+Student{name='tom', school='huax', age=10, joinDate=Tue Aug 15 00:00:00 CST 2017}
+```

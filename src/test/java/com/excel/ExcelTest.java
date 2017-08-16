@@ -1,7 +1,6 @@
 package com.excel;
 
 import com.excel.vo.Student;
-import com.jeff.regan.excel.util.ExcelUtil;
 import com.jeff.regan.excel.vo.Excel;
 import com.jeff.regan.excel.vo.ExcelSheet;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -92,15 +91,48 @@ public class ExcelTest {
         excel.saveExcel("c://student_annotation.xlsx");
     }
 
-    /**
-     * excel数据导入 （无需注解）
-     */
     @Test
-    public void imortExcelNoAn() throws Exception {
-        String keyValue = "姓名:name,学校:school,年龄:age,入学时间:joinDate";
-        List<Object> students = ExcelUtil.readXlsPart("c://student_bak.xlsx", ExcelUtil.getMap(keyValue), Student.class,2);
-        students.forEach(s->System.out.println(s));
+    public void importExcelForMap1() throws IOException {
+        Excel excel = new Excel("c://student_annotation.xlsx");
+        ExcelSheet sheet = excel.getSheet();
+        List<Map<String, String>> list = sheet.getList(1, 0).toMap();
+        list.forEach(map -> System.out.println(map));
     }
+
+    @Test
+    public void importExcelForMap2() throws IOException {
+        Excel excel = new Excel("c://student_annotation.xlsx");
+        ExcelSheet sheet = excel.getSheet();
+        List<Map<String, String>> list = sheet.getList(1, 0).toMap4Annotation(Student.class);
+        list.forEach(map -> System.out.println(map));
+    }
+
+    @Test
+    public void importExcelForMap3() throws IOException {
+        String keyValue = "姓名:name,学校:school,年龄:age,入学时间:joinDate";
+        Excel excel = new Excel("c://student_annotation.xlsx");
+        ExcelSheet sheet = excel.getSheet();
+        List<Map<String, String>> list = sheet.getList(1, 0,keyValue).toMap();
+        list.forEach(map -> System.out.println(map));
+    }
+
+    @Test
+    public void importExcelForObject() throws IOException {
+        String keyValue = "姓名:name,学校:school,年龄:age,入学时间:joinDate";
+        Excel excel = new Excel("c://student_annotation.xlsx");
+        ExcelSheet sheet = excel.getSheet();
+        List<Student> list = sheet.getList(1, 0,keyValue).toObject(Student.class);
+        list.forEach(map -> System.out.println(map));
+    }
+
+    @Test
+    public void importExcelForObject2Annotation() throws IOException {
+        Excel excel = new Excel("c://student_annotation.xlsx");
+        ExcelSheet sheet = excel.getSheet();
+        List<Student> list = sheet.getList(1, 0).toObject(Student.class);
+        list.forEach(map -> System.out.println(map));
+    }
+
     /**
      * 初始化数据
      * @return
