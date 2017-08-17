@@ -401,16 +401,20 @@ public class ExcelSheet {
             return row;
         }
 
-        public Cell getCell() {
+        private Cell getCell() {
             return cell;
         }
 
-        public Cell getCell(int cellNum) {
-            Cell cell = this.row.getCell(cellNum);
-            if (cell == null) {
-                this.row.createCell(cellNum);
-            }
-            return cell;
+        public ExcelRow getCell(int cellNum) {
+            ExcelRow excelRow = new ExcelRow(this.row);
+            excelRow.cell = excelRow.getRow().getCell(cellNum);
+            return excelRow;
+        }
+
+        public String getCellValue(){
+            if(this.cell == null) return null;
+            this.cell.setCellType(Cell.CELL_TYPE_STRING);
+            return this.cell.getStringCellValue();
         }
     }
 

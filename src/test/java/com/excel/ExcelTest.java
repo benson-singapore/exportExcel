@@ -92,6 +92,17 @@ public class ExcelTest {
     }
 
     @Test
+    public void importExcelOne() throws IOException {
+        Excel excel = new Excel("c://student_annotation.xlsx");
+        ExcelSheet sheet = excel.getSheet();
+        System.out.println(sheet.getRow(0).getCell(0).getCellValue());
+    }
+
+    /**
+     * 导入excel
+     * @throws IOException
+     */
+    @Test
     public void importExcelForMap1() throws IOException {
         Excel excel = new Excel("c://student_annotation.xlsx");
         ExcelSheet sheet = excel.getSheet();

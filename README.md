@@ -155,3 +155,13 @@ Student{name='tom', school='huax', age=10, joinDate=Tue Aug 15 00:00:00 CST 2017
 Student{name='tom', school='huax', age=10, joinDate=Tue Aug 15 00:00:00 CST 2017}
 Student{name='tom', school='huax', age=10, joinDate=Tue Aug 15 00:00:00 CST 2017}
 ```
+
+7.获取单条数据
+``` java
+String title = sheet.getRow(0).getCell(0).getCellValue(); //根据指定位置获取数据，统一为String
+System.out.println(title);
+```
+###### 打印结果
+```html 
+学生统计表
+```
