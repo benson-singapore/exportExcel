@@ -87,7 +87,7 @@ public class ExcelSheet {
         Field[] fields = getAllFields(clazz); //获取所有属性
         List<Field> rsFields = sortFields(fields);
         int row = 0;
-        if (this.excelTitle != null && this.excelTitle.title != null && this.excelTitle.title != "") {
+        if (this.excelTitle != null && this.excelTitle.title != null) {
             row = 1;
         }
         //设置头文件
@@ -130,10 +130,9 @@ public class ExcelSheet {
     /**
      * 设置excel 循环list
      *
-     * @param list
-     * @param rowStart
-     * @param cellStart
-     * @param <E>
+     * @param list  list数据
+     * @param rowStart row开始行
+     * @param cellStart cell 开始行
      * @return
      */
     public <E> CellData setDateList(List<E> list, Integer rowStart, Integer cellStart) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -142,7 +141,7 @@ public class ExcelSheet {
 
     public <E> CellData setDateList(List<E> list, Integer rowStart, Integer rowEnd, Integer cellStart, Integer cellEnd) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         List<ExcelRow> rowList = new ArrayList<>();
-        if (list.size() < 1) new CellData(rowList);
+        if (list.size() < 1) return new CellData(rowList);
         Class<?> clazz = list.get(0).getClass();
         Field[] fields = getAllFields(clazz); //获取所有属性
         //对参与excel导出的序列，进行排序
@@ -168,6 +167,11 @@ public class ExcelSheet {
         return new CellData(rowList);
     }
 
+    /**
+     * 对注解字段，按照sort排序
+     * @param fields
+     * @return
+     */
     public List<Field> sortFields(Field[] fields) {
         //对参与excel导出的序列，进行排序
         List<Field> rsFields = Arrays.asList(fields).stream().filter(v -> {
@@ -215,7 +219,7 @@ public class ExcelSheet {
         /**
          * 合并标题
          */
-        if (this.excelTitle != null && this.excelTitle.title != null && this.excelTitle.title != "") {
+        if (this.excelTitle != null && this.excelTitle.title != null) {
             this.sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, columnNum - 1));
             ExcelRow excelRow = this.row(0).cell(0).cellValue(this.excelTitle.title);
             excelRow.getRow().setHeightInPoints(30.0F);
@@ -225,6 +229,11 @@ public class ExcelSheet {
         }
     }
 
+    /**
+     * 反射获取类中的全部属性，包括父类中的属性。
+     * @param clazz
+     * @return
+     */
     public static Field[] getAllFields(Class<?> clazz) {
         Field[] fileds = new Field[0];
         fileds = (Field[]) ArrayUtils.addAll(clazz.getDeclaredFields(), new Field[0]);
@@ -236,6 +245,12 @@ public class ExcelSheet {
         return fileds;
     }
 
+    /**
+     * 根据反射类型设置 cell
+     * @param excelRow row对象
+     * @param fieldType 反射对象
+     * @param val 值
+     */
     private <E> void addCell(ExcelRow excelRow, Class<?> fieldType, Object val) {
         try {
             if (val == null) {
@@ -258,7 +273,9 @@ public class ExcelSheet {
                 excelRow.cellValue((String) Class.forName(this.getClass().getName().replaceAll(this.getClass().getSimpleName(), "fieldtype." + val.getClass().getSimpleName() + "Type")).getMethod("setValue", Object.class).invoke((Object) null, val));
             }
         } catch (Exception var9) {
-            excelRow.cellValue(val.toString());
+            if(val != null){
+                excelRow.cellValue(val.toString());
+            }
         }
     }
 
@@ -288,6 +305,13 @@ public class ExcelSheet {
         return new ImportExcel(rsList, rowNum, cellNum, keys);
     }
 
+    /**
+     * 获取header
+     * @param rowNum row 起始位置
+     * @param cellNum cell起始位置
+     * @param keys 自定义导出数据方式
+     * @return
+     */
     private List<String> getExcelHeader(int rowNum, int cellNum, String[] keys) {
         List<String> headers = new ArrayList<>();
         List<String> rsHeaderList = new ArrayList<>();
@@ -623,6 +647,10 @@ public class ExcelSheet {
         }
     }
 
+    /**
+     * map 转 entity方法
+     * @return
+     */
     public  <T> T mapToEntity(Map<String, String> map,Class<?> clazz) throws IllegalAccessException, InstantiationException, ParseException {
         T entity = (T) clazz.newInstance();
         //对参与excel导出的序列，进行排序

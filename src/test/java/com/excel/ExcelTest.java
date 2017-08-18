@@ -26,6 +26,7 @@ public class ExcelTest {
 
     /**
      * excel 新建
+     *
      * @throws IOException
      */
     @Test
@@ -39,6 +40,7 @@ public class ExcelTest {
 
     /**
      * 模板部分数据替换
+     *
      * @throws IOException
      */
     @Test
@@ -51,6 +53,7 @@ public class ExcelTest {
 
     /**
      * 模板指定位置 list数据循环导出（需要entity注解）
+     *
      * @throws IOException
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
@@ -100,6 +103,7 @@ public class ExcelTest {
 
     /**
      * 导入excel
+     *
      * @throws IOException
      */
     @Test
@@ -123,7 +127,7 @@ public class ExcelTest {
         String keyValue = "姓名:name,学校:school,年龄:age,入学时间:joinDate";
         Excel excel = new Excel("c://student_annotation.xlsx");
         ExcelSheet sheet = excel.getSheet();
-        List<Map<String, String>> list = sheet.getList(1, 0,keyValue).toMap();
+        List<Map<String, String>> list = sheet.getList(1, 0, keyValue).toMap();
         list.forEach(map -> System.out.println(map));
     }
 
@@ -132,7 +136,7 @@ public class ExcelTest {
         String keyValue = "姓名:name,学校:school,年龄:age,入学时间:joinDate";
         Excel excel = new Excel("c://student_annotation.xlsx");
         ExcelSheet sheet = excel.getSheet();
-        List<Student> list = sheet.getList(1, 0,keyValue).toObject(Student.class);
+        List<Student> list = sheet.getList(1, 0, keyValue).toObject(Student.class);
         list.forEach(map -> System.out.println(map));
     }
 
@@ -146,72 +150,74 @@ public class ExcelTest {
 
     /**
      * 初始化数据
+     *
      * @return
      */
-    static List<Student>  init(){
+    static List<Student> init() {
         List<Student> list = new ArrayList<>();
 
-        Student st1 = new Student("tom","huax",10);
-        Student st2 = new Student("tom","huax",10);
-        Student st3 = new Student("tom","huax",10);
+        Student st1 = new Student("tom", "huax", 10);
+        Student st2 = new Student("tom", "huax", 10);
+        Student st3 = new Student("tom", "huax", 10);
         list.add(st1);
         list.add(st2);
         list.add(st3);
-        list.forEach(s->System.out.println(s));
+        list.forEach(s -> System.out.println(s));
         return list;
     }
 
     /**
      * excel 样式
+     *
      * @return
      */
     public Map<String, CellStyle> createStyles(Workbook workbook) {
         Map<String, CellStyle> styles = new HashMap();
         CellStyle style = workbook.createCellStyle();
-        style.setAlignment((short)2);
-        style.setVerticalAlignment((short)1);
+        style.setAlignment((short) 2);
+        style.setVerticalAlignment((short) 1);
         Font titleFont = workbook.createFont();
         titleFont.setFontName("Arial");
-        titleFont.setFontHeightInPoints((short)16);
-        titleFont.setBoldweight((short)700);
+        titleFont.setFontHeightInPoints((short) 16);
+        titleFont.setBoldweight((short) 700);
         style.setFont(titleFont);
         styles.put("title", style);
         style = workbook.createCellStyle();
-        style.setVerticalAlignment((short)1);
-        style.setBorderRight((short)1);
+        style.setVerticalAlignment((short) 1);
+        style.setBorderRight((short) 1);
         style.setRightBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
-        style.setBorderLeft((short)1);
+        style.setBorderLeft((short) 1);
         style.setLeftBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
-        style.setBorderTop((short)1);
+        style.setBorderTop((short) 1);
         style.setTopBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
-        style.setBorderBottom((short)1);
+        style.setBorderBottom((short) 1);
         style.setBottomBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
         Font dataFont = workbook.createFont();
         dataFont.setFontName("Arial");
-        dataFont.setFontHeightInPoints((short)10);
+        dataFont.setFontHeightInPoints((short) 10);
         style.setFont(dataFont);
         styles.put("data", style);
         style = workbook.createCellStyle();
-        style.cloneStyleFrom((CellStyle)styles.get("data"));
-        style.setAlignment((short)1);
+        style.cloneStyleFrom((CellStyle) styles.get("data"));
+        style.setAlignment((short) 1);
         styles.put("data1", style);
         style = workbook.createCellStyle();
-        style.cloneStyleFrom((CellStyle)styles.get("data"));
-        style.setAlignment((short)2);
+        style.cloneStyleFrom((CellStyle) styles.get("data"));
+        style.setAlignment((short) 2);
         styles.put("data2", style);
         style = workbook.createCellStyle();
-        style.cloneStyleFrom((CellStyle)styles.get("data"));
-        style.setAlignment((short)3);
+        style.cloneStyleFrom((CellStyle) styles.get("data"));
+        style.setAlignment((short) 3);
         styles.put("data3", style);
         style = workbook.createCellStyle();
-        style.cloneStyleFrom((CellStyle)styles.get("data"));
-        style.setAlignment((short)2);
+        style.cloneStyleFrom((CellStyle) styles.get("data"));
+        style.setAlignment((short) 2);
         style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
-        style.setFillPattern((short)1);
+        style.setFillPattern((short) 1);
         Font headerFont = workbook.createFont();
         headerFont.setFontName("Arial");
-        headerFont.setFontHeightInPoints((short)10);
-        headerFont.setBoldweight((short)700);
+        headerFont.setFontHeightInPoints((short) 10);
+        headerFont.setBoldweight((short) 700);
         headerFont.setColor(IndexedColors.WHITE.getIndex());
         style.setFont(headerFont);
         styles.put("header", style);
