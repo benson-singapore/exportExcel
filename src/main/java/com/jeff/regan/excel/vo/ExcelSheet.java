@@ -168,10 +168,34 @@ public class ExcelSheet {
     }
 
     /**
-     * 对注解字段，按照sort排序
-     * @param fields
-     * @return
+     * map 导出
      */
+    public CellData setDateList4Map(List<Map<String,Object>> list, Integer rowStart, Integer cellStart) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        List<ExcelRow> rowList = new ArrayList<>();
+        if (list.size() < 1) return new CellData(rowList);
+        //设置excel 值
+        int maxWeight = 0;
+        for (Map map : list) {
+            if (maxWeight < map.size()) maxWeight = map.size();
+            int cellNum = cellStart;
+            for (Object k : map.keySet()) {
+                //获取值
+                ExcelRow cell = this.row(rowStart).cell(cellNum);
+                rowList.add(cell);
+                addCell(cell, String.class, map.get(k));
+                cellNum++;
+            }
+            rowStart += 1;
+        }
+        autoWeight(maxWeight);
+        return new CellData(rowList);
+    }
+
+        /**
+         * 对注解字段，按照sort排序
+         * @param fields
+         * @return
+         */
     public List<Field> sortFields(Field[] fields) {
         //对参与excel导出的序列，进行排序
         List<Field> rsFields = Arrays.asList(fields).stream().filter(v -> {

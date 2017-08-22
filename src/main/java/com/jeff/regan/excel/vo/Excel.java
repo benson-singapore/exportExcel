@@ -33,11 +33,11 @@ public class Excel {
     public Excel(String filePath) throws IOException {
         //excel模板路径
         File fi = new File(filePath);
-        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(fi));
         //读取excel模板
         try {
+            POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(fi));
             this.workbook = new HSSFWorkbook(fs);
-        }catch (Exception e){
+        } catch (Exception e) {
             this.workbook = new XSSFWorkbook(new FileInputStream(fi));
         }
     }
@@ -73,6 +73,7 @@ public class Excel {
 
     /**
      * 获取工作簿 根据sheet name
+     *
      * @param sheetName
      * @return
      */
@@ -82,14 +83,17 @@ public class Excel {
 
     /**
      * 获取工作簿 根据
+     *
      * @param sheetIndex
      * @return
      */
     public ExcelSheet getSheet(int sheetIndex) {
         return new ExcelSheet(this.workbook.getSheetAt(sheetIndex));
     }
+
     /**
      * 获取工作簿 根据
+     *
      * @return
      */
     public ExcelSheet getSheet() {
@@ -108,13 +112,13 @@ public class Excel {
      */
     public void saveExcel(String file) throws IOException {
         OutputStream out = new FileOutputStream(new File(file));
-       try {
-           this.workbook.write(out);
-       }catch (IOException e){
-           throw new IOException();
-       }finally {
-           out.close();
-       }
+        try {
+            this.workbook.write(out);
+        } catch (IOException e) {
+            throw new IOException();
+        } finally {
+            out.close();
+        }
     }
 
     /**
@@ -126,4 +130,35 @@ public class Excel {
     public void saveExcel(OutputStream outputStream) throws IOException {
         this.workbook.write(outputStream);
     }
+
+    /**
+     * excel 导出
+     *
+     * @throws IOException
+     */
+    /*public void saveExcel(String fileName, HttpServletResponse response) throws IOException {
+        ServletOutputStream fOut = null;
+        try {
+            response.setContentType("application/vnd.ms-excel;charSet=UTF-8");
+            String codedFileName = null;
+            codedFileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+            response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
+            fOut = response.getOutputStream();
+            this.workbook.write(fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fOut.flush();
+                fOut.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }*/
 }
