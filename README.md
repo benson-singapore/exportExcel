@@ -165,3 +165,15 @@ System.out.println(title);
 ```html 
 学生统计表
 ```
+
+8.excel导出样式优化，简化单元格样式设置。
+``` java
+//设置样式
+CellStyle cellStyle = ExcelStyle.builder(excel.getWorkbook())
+                .align(HSSFCellStyle.ALIGN_CENTER) //设置居中
+                .fondFamily("宋体")  //设置字体
+                .fondSize((short) 12) //设置字体大小
+                .fondWeight((short) 10) //加粗
+                .border(ExcelStyle.BORDER_TOP, ExcelStyle.BORDER_LEFT, ExcelStyle.BORDER_BOTTOM, ExcelStyle.BORDER_RIGHT) //设置表格边框
+                .build();
+```

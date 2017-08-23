@@ -3,6 +3,8 @@ package com.excel;
 import com.excel.vo.Student;
 import com.jeff.regan.excel.vo.Excel;
 import com.jeff.regan.excel.vo.ExcelSheet;
+import com.jeff.regan.excel.vo.ExcelStyle;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -146,6 +148,21 @@ public class ExcelTest {
         ExcelSheet sheet = excel.getSheet();
         List<Student> list = sheet.getList(1, 0).toObject(Student.class);
         list.forEach(map -> System.out.println(map));
+    }
+
+    public void easyStyle() throws IOException {
+        Excel excel = new Excel();
+        ExcelSheet sheet = excel.createSheet();
+        //设置样式
+        CellStyle cellStyle = ExcelStyle.builder(excel.getWorkbook())
+                .align(HSSFCellStyle.ALIGN_CENTER) //设置居中
+                .fondFamily("宋体")  //设置字体
+                .fondSize((short) 12) //设置字体大小
+                .fondWeight((short) 10) //加粗
+                .border(ExcelStyle.BORDER_TOP, ExcelStyle.BORDER_LEFT, ExcelStyle.BORDER_BOTTOM, ExcelStyle.BORDER_RIGHT) //设置表格边框
+                .build();
+        sheet.row(1).cell(2).cellValue("2").cellStyle(cellStyle);
+        excel.saveExcel("c://test1.xlsx");
     }
 
     /**
